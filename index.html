@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>DSA Instructor AI</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Code Highlighting -->
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
+
+    <!-- Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.2.6/purify.min.js"></script>
+
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            <span class="logo-icon">⚡</span>
+            <h2>DSA<span>Instructor</span></h2>
+        </div>
+
+        <button class="new-chat" onclick="clearChat()">
+            + New Chat
+        </button>
+
+        <div class="menu">
+
+            <p class="menu-title">WORKSPACE</p>
+
+            <button class="menu-item active">
+                💬 &nbsp; AI Tutor
+            </button>
+
+           <button class="menu-item" onclick="showPracticeProblems()">
+    📚 &nbsp; Practice Problems
+</button>
+            <button class="menu-item">
+                🧠 &nbsp; DSA Quiz
+            </button>
+
+            <button class="menu-item">
+                📊 &nbsp; My Progress
+            </button>
+
+        </div>
+
+        <!-- CHAT HISTORY -->
+        <div class="history-section">
+
+            <p class="menu-title">RECENT CHATS</p>
+
+            <div id="historyList">
+                <p class="empty-history">
+                    Your conversations will appear here.
+                </p>
+            </div>
+
+        </div>
+
+        <!-- PROFILE -->
+        <div class="profile-section">
+
+            <div class="profile-avatar">S</div>
+
+            <div class="profile-info">
+                <h4 id="profileName">Guest User</h4>
+                <p>DSA Learner</p>
+            </div>
+
+            <button class="profile-menu" onclick="showAccountOptions()">
+                ⋮
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN AREA -->
+    <main class="main-area">
+
+        <!-- HEADER -->
+        <header class="top-header">
+
+            <div>
+                <h3>AI Learning Workspace</h3>
+                <p>Your personal DSA learning assistant</p>
+            </div>
+
+            <div class="header-actions">
+
+                <span class="online-status">
+                    ● AI Online
+                </span>
+
+                <button class="login-btn" onclick="showLogin()">
+                    Login / Sign Up
+                </button>
+
+            </div>
+
+        </header>
+
+<!-- PRACTICE PROBLEMS SECTION -->
+<section class="practice-container" id="practiceSection" style="display: none;">
+
+    <div class="practice-header">
+        <h1>📚 Practice Problems</h1>
+        <p>Improve your DSA skills with AI-powered practice.</p>
+    </div>
+
+    <div class="practice-controls">
+
+        <div>
+            <label>Select Topic</label>
+            <select id="practiceTopic">
+                <option value="Arrays">Arrays</option>
+                <option value="Strings">Strings</option>
+                <option value="Linked Lists">Linked Lists</option>
+                <option value="Stacks">Stacks</option>
+                <option value="Queues">Queues</option>
+                <option value="Trees">Trees</option>
+                <option value="Graphs">Graphs</option>
+                <option value="Sorting">Sorting</option>
+                <option value="Searching">Searching</option>
+            </select>
+        </div>
+
+        <div>
+            <label>Difficulty</label>
+            <select id="practiceDifficulty">
+                <option value="Easy">Easy</option>
+                <option value="Medium">Medium</option>
+                <option value="Hard">Hard</option>
+            </select>
+        </div>
+
+    </div>
+
+    <button class="generate-btn" onclick="generateProblem()">
+        ✨ Generate Problem
+    </button>
+
+    <div id="problemResult" class="problem-result">
+        <h3>Your Practice Problem Will Appear Here</h3>
+        <p>Select a topic and difficulty, then click Generate Problem.</p>
+    </div>
+
+    <div class="practice-actions">
+
+        <button onclick="showHint()">💡 Show Hint</button>
+
+        <button onclick="showSolution()">👨‍💻 Show Solution</button>
+
+        <button onclick="generateProblem()">➡ Next Problem</button>
+
+    </div>
+
+</section>
+        <!-- CHAT AREA -->
+        <section class="chat-container">
+
+            <div class="welcome-section">
+
+                <div class="welcome-icon">⚡</div>
+
+                <h1>Master DSA with <span>AI</span></h1>
+
+                <p>
+                    Your personal AI instructor for Data Structures
+                    and Algorithms.
+                </p>
+
+            </div>
+
+
+            <!-- SUGGESTIONS -->
+            <div class="suggestions">
+
+                <button onclick="sendSuggestion('Explain Arrays with examples')">
+                    <span>📦</span>
+                    <strong>Arrays</strong>
+                    <small>Learn the basics</small>
+                </button>
+
+                <button onclick="sendSuggestion('Explain Linked Lists')">
+                    <span>🔗</span>
+                    <strong>Linked Lists</strong>
+                    <small>Understand connections</small>
+                </button>
+
+                <button onclick="sendSuggestion('Explain Trees and BST')">
+                    <span>🌳</span>
+                    <strong>Trees</strong>
+                    <small>Explore hierarchies</small>
+                </button>
+
+                <button onclick="sendSuggestion('Explain Graph Algorithms')">
+                    <span>🕸️</span>
+                    <strong>Graphs</strong>
+                    <small>Learn graph theory</small>
+                </button>
+
+            </div>
+
+
+            <!-- MESSAGES -->
+            <div class="chat-area" id="chatArea">
+
+                <div class="message bot-message">
+
+                    <div class="avatar">⚡</div>
+
+                    <div class="message-content">
+
+                        <h3>Hello, Learner! 👋</h3>
+
+                        <p>
+                            I'm your AI-powered DSA Instructor.
+                            Ask me anything and let's learn together!
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- INPUT -->
+            <div class="input-section">
+
+                <div class="input-box">
+
+                    <input
+                        type="text"
+                        id="userInput"
+                        placeholder="Ask anything about Data Structures and Algorithms..."
+                        autocomplete="off"
+                    >
+
+                    <button id="sendBtn" onclick="handleChat()">
+                        ➤
+                    </button>
+
+                </div>
+
+                <p class="hint">
+                    Press Enter to send • Powered by Gemini AI
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- LOGIN MODAL -->
+<div class="modal" id="loginModal">
+
+    <div class="modal-box">
+
+        <button class="close-modal" onclick="closeLogin()">
+            ×
+        </button>
+
+        <div class="modal-logo">⚡</div>
+
+        <h2>Welcome Back!</h2>
+
+        <p>Login to your DSA learning account.</p>
+
+        <form onsubmit="loginUser(event)">
+
+            <input
+                type="email"
+                id="loginEmail"
+                placeholder="Email address"
+                required
+            >
+
+            <input
+                type="password"
+                id="loginPassword"
+                placeholder="Password"
+                required
+            >
+
+            <button type="submit" class="modal-submit">
+                Login
+            </button>
+
+        </form>
+
+        <p class="signup-text">
+            Don't have an account?
+            <button onclick="showSignup()">Sign Up</button>
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- SIGNUP MODAL -->
+<div class="modal" id="signupModal">
+
+    <div class="modal-box">
+
+        <button class="close-modal" onclick="closeSignup()">
+            ×
+        </button>
+
+        <div class="modal-logo">⚡</div>
+
+        <h2>Create Account</h2>
+
+        <p>Start your DSA learning journey.</p>
+
+        <form onsubmit="signupUser(event)">
+
+            <input
+                type="text"
+                id="signupName"
+                placeholder="Your name"
+                required
+            >
+
+            <input
+                type="email"
+                id="signupEmail"
+                placeholder="Email address"
+                required
+            >
+
+            <input
+                type="password"
+                id="signupPassword"
+                placeholder="Create password"
+                minlength="8"
+                required
+            >
+
+            <button type="submit" class="modal-submit">
+                Create Account
+            </button>
+
+        </form>
+
+        <p class="signup-text">
+            Already have an account?
+            <button onclick="showLogin()">Login</button>
+        </p>
+
+    </div>
+
+</div>
+
+
+<script src="dsa.js"></script>
+
+</body>
+</html>
+<!-- CODE SUBMISSION SECTION -->
+
+<div class="code-submission">
+
+    <h2>💻 Submit Your Solution</h2>
+
+    <p>Write your solution in C++ and get AI feedback.</p>
+
+    <textarea
+        id="userCode"
+        placeholder="Write your C++ code here..."
+        spellcheck="false">
+    </textarea>
+
+    <button onclick="evaluateCode()">
+        🚀 Evaluate My Code
+    </button>
+
+    <div id="evaluationResult"></div>
+
+</div>
